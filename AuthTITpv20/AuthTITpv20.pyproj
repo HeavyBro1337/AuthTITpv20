@@ -25,6 +25,9 @@
     <Compile Include="Auth.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="account_management.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="variables.py">
       <SubType>Code</SubType>
     </Compile>

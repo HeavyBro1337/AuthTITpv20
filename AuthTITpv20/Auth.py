@@ -31,7 +31,7 @@ def gen_password(): # Функция для генерации пароля
 
 def register(autogenerate): # Регистрируем пользователя
 	username = input("Type user's name ")
-	if does_user_exist(username): # Не запускаем дальше код, если есть уже пользователь с таким именем
+	if does_user_exist(username) != None: # Не запускаем дальше код, если есть уже пользователь с таким именем
 		return
 	password = "" # Создаем переменную и присваиваем значение на базе опции авто-генерации
 	new_user = None
@@ -43,8 +43,6 @@ def register(autogenerate): # Регистрируем пользователя
 		password = input("Type a password ")
 		if check_password(password):
 			register_usr = True
-		else:
-			print(var.throw_error(1))
 	if register_usr:
 		new_user = var.user(username,password)
 		var.users.append(new_user)
@@ -76,27 +74,5 @@ def does_user_exist(username): # Проверка на существовани�
 	for u in var.users:
 		if u.username == username:
 			print(var.throw_error(3))
-			return True
-	return False
-
-
-def change_name(u : var.user, new_name): # Изменить имя аккаунта
-	index = var.users.index(u)
-	if not does_user_exist(new_name):
-		var.users[index].username = new_name
-
-
-
-def delete_account(u : var.user): # Удалить аккаунт с базы данных
-	var.users.remove(u)
-
-
-
-def change_pass(u : var.user): # Изменить пароль аккаунта
-	index = var.users.index(u)
-	old_pass = input("Type the old password ")
-	if old_pass == u.password:
-		new_password = input("Type the new password ")
-		if check_password(new_password):
-			var.users[index].password = new_password
-			print("Successfully changed the password!")
+			return u
+	return None

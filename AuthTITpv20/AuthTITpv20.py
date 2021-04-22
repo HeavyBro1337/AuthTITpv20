@@ -1,6 +1,7 @@
 import Auth as au
 import variables as var
 import pickle
+import account_management as accs
 def print_help():
 	print()
 	print(f"Logged as {var.logged.username}" if var.logged != None else "Currently not logged in")
@@ -10,13 +11,16 @@ def print_help():
 		print("/aregister - Register with auto-generated password")
 	print("/printusers - Print all users")
 	print("/printc - Print all users COMPACT")
+	print("/sort - Sort users by name alphabetically")
 	if var.logged != None:
 		print()
 		print("======== Account Management ========")
 		print("/delete - Delete current account for good")
 		print("/changename - Set new username")
 		print("/changepassword - Change the password")
-	print("/sort - Sort users by name alphabetically")
+		print("/transfer - Transfer money to user")
+		print()
+		print(f"Balance: {var.logged.balance}€")
 	print()
 
 comm = ""
@@ -71,17 +75,20 @@ while comm != "/exit": # Цикл работает до тех пор, пока 
 			var.logged = None
 	elif comm == "/delete":
 		if var.logged != None:
-			au.delete_account(var.logged)
+			accs.delete_account(var.logged)
 			var.logged = None
 			print("Successfully removed account")
 	elif comm == "/changename":
 		if var.logged != None:
-			au.change_name(var.logged, input("Write new name "))
+			accs.change_name(var.logged, input("Write new name "))
 	elif comm == "/changepassword":
 		if var.logged != None:
-			au.change_pass(var.logged)
+			accs.change_pass(var.logged)
 	elif comm == "/exit":
 		continue
+	elif comm == "/transfer":
+		if var.logged != None:
+			accs.transfer(var.logged)
 	elif comm == "/sort":
 		var.users.sort()
 		print()
