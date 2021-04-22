@@ -29,53 +29,50 @@ def gen_password(): # Функция для генерации пароля
 	psword = ''.join([random.choice(ls) for x in range(12)])
 	return psword
 
-def register(autogenerate):
+def register(autogenerate): # Регистрируем пользователя
 	username = input("Type user's name ")
-	if does_user_exist(username):
+	if does_user_exist(username): # Не запускаем дальше код, если есть уже пользователь с таким именем
 		return
-	password = ""
+	password = "" # Создаем переменную и присваиваем значение на базе опции авто-генерации
+	new_user = None
+	register_usr = False
 	if autogenerate:
 		password = gen_password()
-		new_user = var.user(username,password)
-		var.users.append(new_user)
-		print("Successfully registered new account")
-		print()
-		return new_user
+		register_usr = True
 	else:
 		password = input("Type a password ")
 		if check_password(password):
-			new_user = var.user(username,password)
-			var.users.append(new_user)
-			print("Successfully registered new account")
-			print()
-			return new_user
-def check_password(password: str):
-	isdig = False
-	isupper = False
-	islower = False
+			register_usr = True
+		else:
+			print(var.throw_error(1))
+	if register_usr:
+		new_user = var.user(username,password)
+		var.users.append(new_user)
 
-	for c in password:
+
+		print("Successfully registered new account")
+		print()
+	return new_user
+def check_password(password: str): # Проверка пароля на выполнение следующих условий
+	isdig = False # Есть хотя бы одно число
+	isupper = False # Имеется хотя бы буква в верхнем регистре
+	islower = False # Так же и в нижнем регистре
+
+	for c in password: # Создаем цикл, который будет проходить по password
 		if c.isdigit():
 			isdig = True
-			break
-	for c in password:
-		if c.isupper():
+		elif c.isupper():
 			isupper = True
-			break
-	for c in password:
-		if c.islower():
+		elif c.islower():
 			islower = True
-			break
+		if isdig and isupper and islower:
+			return True
 
-	result = isdig and isupper and islower
-	if result:
-		return True
-	else:
-		print(var.throw_error(1))
-		return False
+	print(var.throw_error(1))
+	return False
 
 
-def does_user_exist(username):
+def does_user_exist(username): # Проверка на существование пользователя по имени
 	for u in var.users:
 		if u.username == username:
 			print(var.throw_error(3))
@@ -83,13 +80,19 @@ def does_user_exist(username):
 	return False
 
 
-def change_name(u : var.user, new_name):
+def change_name(u : var.user, new_name): # Изменить имя аккаунта
 	index = var.users.index(u)
 	if not does_user_exist(new_name):
 		var.users[index].username = new_name
-def delete_account(u : var.user):
+
+
+
+def delete_account(u : var.user): # Удалить аккаунт с базы данных
 	var.users.remove(u)
-def change_pass(u : var.user):
+
+
+
+def change_pass(u : var.user): # Изменить пароль аккаунта
 	index = var.users.index(u)
 	old_pass = input("Type the old password ")
 	if old_pass == u.password:
